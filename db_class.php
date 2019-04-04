@@ -57,17 +57,17 @@ class Export_DB
 		*/
 	public function backupTables()
 	{
-		//Initializing database tables
+//Initializing database tables
 		$tables = $this->get_tables();
-		//////////////////////////////
+//////////////////////////////
 
-		//Create database query
+//Create database query
 		$sql = "CREATE DATABASE IF NOT EXISTS `{$this->db}`;\n\n";
 		foreach ($tables as $table)
 		{
 			$sql .= "USE `{$this->db}`;\n\n";
 			$sql .= "SET foreign_key_checks = 0;\n\n";
-			//Create table
+//Create table
 			$sql .= "DROP TABLE IF EXISTS `{$table}`;\n\n";
 			$create_sql = $this->con->query("SHOW CREATE TABLE `{$table}`;")->fetch_row()[1];
 			$sql .= "{$create_sql};\n\n";
@@ -75,9 +75,9 @@ class Export_DB
 			$table_rows = $this->con->query("SELECT COUNT(*) FROM `{$table}`")->fetch_row()[0];
 			$num_files = ceil($table_rows / $this->max_rows); // Calculate how many files we need to generate
 
-			//Generate data
+//Generate data
 			$this->insert_into($num_files, $table, $sql);
-			//////////////////////////////
+//////////////////////////////
 		}
 		return true;
 	}
