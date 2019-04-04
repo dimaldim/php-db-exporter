@@ -117,7 +117,7 @@ class Export_DB
 
                 for ($j = 0; $j < $num_fields; $j++) {
                     $row_count = 1;
-                    while ($row = mysqli_fetch_row($result)) {
+                    while ($row = $result->fetch_row()) {
                         $sql .= '(';
                         for ($k = 0; $k < $num_fields; $k++) {
                             if (isset($row[$k])) {
