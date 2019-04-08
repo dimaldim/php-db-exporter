@@ -63,6 +63,7 @@ class Export_DB
         //Create database query
         $sql = "CREATE DATABASE IF NOT EXISTS `{$this->db}`;\n\n";
         foreach ($tables as $table) {
+            $this->print_to_user("Backing up table {$table}" . str_repeat('.', 50 - strlen($table)), 0);
             $sql .= "USE `{$this->db}`;\n\n";
             $sql .= "SET foreign_key_checks = 0;\n\n";
             //Create table
@@ -75,6 +76,7 @@ class Export_DB
 
             //Generate data
             $this->insert_into($num_files, $table, $sql);
+            $this->print_to_user("OK");
             //////////////////////////////
         }
         return true;
@@ -169,7 +171,7 @@ class Export_DB
      * @param $file
      * @return bool
      */
-    public function save($sql, $file)
+    public function save(&$sql, $file)
     {
         if (!$sql) return false;
         try {
@@ -209,6 +211,29 @@ class Export_DB
         if (!unlink($file)) return false;
 
         return $new_file;
+    }
+
+////////////////////////////////////////////////////////////
+    public function print_to_user($msg, $breaks = 1)
+    {
+        if (!$msg) return false;
+        if ($msg != "OK") {
+            $msg = date("Y-m-d H:i:s") . " - " . $msg;
+        }
+        $output = '';
+
+        $output .= $msg;
+        if ($breaks > 0) {
+            for ($i = 1; $i <= $breaks; $i++) {
+                $output .= "<br/>";
+            }
+        }
+        if (ob_get_level() > 0) {
+            ob_get_flush();
+        }
+        echo $output;
+
+        flush();
     }
 ////////////////////////////////////////////////////////////
 }
