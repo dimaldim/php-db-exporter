@@ -77,6 +77,7 @@ class Export_DB
             //Generate data
             $this->insert_into($num_files, $table, $sql);
             $this->print_to_user("OK");
+            $sql = '';
             //////////////////////////////
         }
         return true;
@@ -103,7 +104,7 @@ class Export_DB
      * @param $table
      * @param $sql
      */
-    public function insert_into($num_files, $table, &$sql)
+    public function insert_into($num_files, $table, $sql)
     {
         if ($num_files == 0) {
             $this->save($sql, "{$table}.sql");
@@ -171,7 +172,7 @@ class Export_DB
      * @param $file
      * @return bool
      */
-    public function save(&$sql, $file)
+    public function save($sql, $file)
     {
         if (!$sql) return false;
         try {
